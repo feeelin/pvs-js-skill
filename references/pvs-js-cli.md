@@ -5,6 +5,11 @@ Condensed from the official docs: https://pvs-studio.ru/ru/docs/manual/7195/
 this file when `scripts/run-pvs-check.js` doesn't cover what you need —
 custom rule sets, suppression, monorepo layouts, or license file locations.
 
+Applies to `pvs-js` 8.00+. Exit-code behavior in particular (the 20/21/22
+license codes) has changed across releases — if you're on an older install,
+verify against `pvs-js analyze --help` or the linked docs before relying on
+the table below.
+
 ## Two modes
 
 - `pvs-js analyze <projectDir> [flags]` — runs the analysis.
@@ -34,7 +39,10 @@ custom rule sets, suppression, monorepo layouts, or license file locations.
 - `--analysis-paths <spec>` — include/exclude paths or globs, e.g. to skip
   `3rd-party/` or `unittests/`. Independent from `--source-files`: this
   controls *policy* (what's ever eligible), `--source-files` controls *scope
-  for this run* (what to check this time).
+  for this run* (what to check this time). `collect-changed-files.js`
+  already excludes `node_modules/` and common build/dist output before
+  building the `--source-files` list, so those directories shouldn't need a
+  separate `--analysis-paths` exclusion in normal use.
 - `--suppress-files <path>` — read one or more suppression files. Defaults to
   `suppress_file.suppress.json` in the analyzed directory if present.
 - `--threads <n>` / `--file-analysis-timeout <XXhYYmZZs>` — performance
@@ -53,6 +61,24 @@ custom rule sets, suppression, monorepo layouts, or license file locations.
 - `--security-related-issues` — adds ГОСТ Р 71207-2024 SEC-labels to
   warnings. Not relevant unless the project specifically tracks that
   standard.
+
+## Suppressing warnings
+
+Two mechanisms exist; both are for baselining *pre-existing* warnings in
+code you didn't touch, never for silencing something in code you just wrote:
+
+- **File-level, via `pvs-js suppress <report.json>`** — takes a full report
+  and marks everything in it as suppressed going forward. Coarse-grained;
+  good for "baseline this whole legacy file/module once."
+- **Inline, via a `//-V` comment** on the specific flagged line — finer-grained,
+  suppresses just that one warning instance rather than everything in the
+  file. The exact comment syntax (which codes it accepts, whether it's
+  `//-VNNNN` or a range) is documented at the CLI reference link at the top
+  of this file — check there rather than guessing at the format, since it's
+  easy to get subtly wrong and end up suppressing nothing.
+
+If a warning is a genuine false positive on new code, prefer surfacing that
+to the user explicitly over reaching for either mechanism.
 
 ## Exit codes — `analyze`
 
@@ -123,4 +149,11 @@ prerequisite for the JS/TS analyzer anyway.
     }
   ]
 }
+```
+
+The console output format printed by `run-pvs-check.js` is derived from this
+schema, one line per warning:
+
+```
+<file>:<line>:<column> [<code>] (level <level>) <message>
 ```
