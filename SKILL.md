@@ -1,6 +1,7 @@
 ---
 name: pvs-js-skill
 description: Runs PVS-Studio's static analyzer (pvs-js) against JavaScript/TypeScript code the agent has written or modified, before considering the work finished, committing, or handing it back to the user. Use this skill whenever you are about to wrap up a coding task that touched .js/.ts/ files, before running `git commit`, before saying a change is "done" or "ready", and any time you've just written or edited JS/TS code — even if the user didn't explicitly ask for static analysis. Also use it mid-task if you want a sanity check after a risky edit. Do not skip this just because the change looks small. Requires PVS-Studio (pvs-js) to already be installed and licensed on the machine — this skill runs it, it does not install or license it.
+allowed-tools: Bash(node ${CLAUDE_SKILL_DIR}/scripts/*) Bash(git diff *) Bash(git status *)
 ---
 
 # Static Analysis Checkpoint (PVS-Studio)
