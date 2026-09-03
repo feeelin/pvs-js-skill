@@ -31,3 +31,9 @@ scan if the directory isn't a git repo. Pass `--full` to force a full scan.
   lists changed/new JS/TS files via git; called by `run-pvs-check.js`.
 - [references/pvs-js-cli.md](references/pvs-js-cli.md) — full `pvs-js` flag
   and exit-code reference, report JSON schema, and platform-specific notes.
+
+## License
+
+Copyright (C) 2026 PVS-Studio LLC
+
+This project is licensed under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0).
