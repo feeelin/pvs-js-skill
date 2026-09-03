@@ -6,6 +6,8 @@ considers a change finished — not only before a commit.
 
 See [SKILL.md](SKILL.md) for the full workflow the agent follows.
 
+> For non-commercial use only. See details in the [License](#license) section.
+
 ## Prerequisites
 
 `pvs-js` must already be installed, licensed, and on `PATH`. This skill runs
